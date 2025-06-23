@@ -1,9 +1,9 @@
 name: build-test-deploy
 on: push
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: use node.js
@@ -12,10 +12,12 @@ jobs:
           node-version: '18.x'
       - run: npm install
       - run: npm run build
-  test: 
+      - name: check for errors
+        run: cat .npm/_logs/*.log || true
+  test:
     needs: build
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: use node.js
@@ -24,3 +26,5 @@ jobs:
           node-version: '18.x'
       - run: npm install
       - run: npm test
+      - name: check for errors
+        run: cat .npm/_logs/*.log || true
